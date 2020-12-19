@@ -20,8 +20,9 @@ class DirectMessageEvents(commands.Cog, name="Direct Message"):
         self.guild = None
 
     async def send_mail(self, message, guild, to_send):
+        old_guild = guild
+        guild = await self.bot.tools.guild_replace(self.bot, self.bot.get_guild(guild))
         self.bot.prom.tickets_message.inc({})
-        guild = await self.bot.comm.handler("get_guild", -1, {"guild_id": guild})
         if not guild:
             await message.channel.send(
                 embed=discord.Embed(description="The server was not found.", colour=self.bot.error_colour)
@@ -40,11 +41,11 @@ class DirectMessageEvents(commands.Cog, name="Direct Message"):
                 )
             )
             return
-        data = await self.bot.get_data(guild.id)
+        data = await self.bot.get_data(old_guild)
         category = await self.bot.comm.handler(
             "get_guild_channel",
             -1,
-            {"guild_id": guild.id, "channel_id": data[2]},
+            {"guild_id": old_guild, "channel_id": data[2]},
         )
         if not category:
             await message.channel.send(
@@ -82,7 +83,7 @@ class DirectMessageEvents(commands.Cog, name="Direct Message"):
                 else:
                     name = message.author.id
                 channel_id = (await self.bot.http.create_channel(
-                    guild.id,
+                    old_guild,
                     0,
                     name=name,
                     parent_id=category.id,

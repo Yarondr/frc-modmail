@@ -42,3 +42,9 @@ CREATE TABLE public.preference
     confirmation boolean NOT NULL,
     PRIMARY KEY (identifier)
 );
+CREATE TABLE public.proxy_guild
+(
+    original bigint NOT NULL,
+    new bigint NOT NULL,
+    PRIMARY KEY (original)
+);

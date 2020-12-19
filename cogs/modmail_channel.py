@@ -51,10 +51,11 @@ class ModMailEvents(commands.Cog):
             )
             return
         user = self.bot.tools.get_modmail_user(message.channel)
-        member = message.guild.get_member(user)
+        guild = await self.bot.tools.guild_replace(self.bot, message.guild)
+        member = guild.get_member(user)
         if member is None:
             try:
-                member = await message.guild.fetch_member(user)
+                member = await guild.fetch_member(user)
             except discord.NotFound:
                 await message.channel.send(
                     embed=discord.Embed(
@@ -78,7 +79,7 @@ class ModMailEvents(commands.Cog):
                 if anon is False
                 else "https://cdn.discordapp.com/embed/avatars/0.png",
             )
-            embed.set_footer(text=f"{message.guild.name} | {message.guild.id}", icon_url=message.guild.icon_url)
+            embed.set_footer(text=f"{guild.name} | {guild.id}", icon_url=guild.icon_url)
             files = []
             for file in message.attachments:
                 saved_file = io.BytesIO()

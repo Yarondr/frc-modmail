@@ -19,6 +19,15 @@ async def get_user_settings(bot, user):
         return await conn.fetchrow("SELECT identifier, confirmation FROM preference WHERE identifier=$1", user)
 
 
+async def guild_replace(bot, guild):
+    async with bot.pool.acquire() as conn:
+        result = await conn.fetchrow("SELECT original FROM proxy_guild WHERE new=$1", guild.id)
+        if result is None:
+            return guild
+        else:
+            return bot.get_guild(result[0])
+
+
 async def get_premium_slots(bot, user):
     if not bot.config.main_server:
         return False
