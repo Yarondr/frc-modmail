@@ -136,7 +136,7 @@ class General(commands.Cog):
         users = sum(await self.bot.comm.handler("user_count", self.bot.cluster_count))
 
         embed = discord.Embed(title=f"{self.bot.user.name} Statistics", colour=self.bot.primary_colour)
-        embed.add_field(name="Owner", value="CHamburr#2591")
+        embed.add_field(name="Owner", value="tweirtx#5052")
         embed.add_field(name="Bot Version", value=self.bot.version)
         embed.add_field(name="Uptime", value=self.get_bot_uptime(brief=True))
         embed.add_field(name="Clusters", value=f"{self.bot.cluster}/{self.bot.cluster_count}")
@@ -353,7 +353,7 @@ class General(commands.Cog):
         await ctx.send(
             embed=discord.Embed(
                 title="GitHub Repository",
-                description="https://github.com/chamburr/modmail",
+                description="https://github.com/frcdiscord/modmail",
                 colour=self.bot.primary_colour,
             )
         )

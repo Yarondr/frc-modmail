@@ -15,7 +15,7 @@ class ModMailEvents(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.Cog.listener()
+    # @commands.Cog.listener() # commented for easy restoring later if we desire
     async def on_message(self, message):
         if message.author.bot or not message.guild or not checks.is_modmail_channel2(self.bot, message.channel):
             return
