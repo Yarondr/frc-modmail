@@ -213,8 +213,9 @@ class Core(commands.Cog):
         usage="blacklist <member>",
         aliases=["block"],
     )
-    async def blacklist(self, ctx, *, member: discord.Member):
-        blacklist = (await self.bot.get_data(ctx.guild.id))[9]
+    async def blacklist(self, ctx, *, member: discord.User):
+        guild = await self.bot.tools.guild_replace(self.bot, ctx.guild)
+        blacklist = (await self.bot.get_data(guild.id))[9]
         if member.id in blacklist:
             await ctx.send(
                 embed=discord.Embed(description="The user is already blacklisted.", colour=self.bot.error_colour)
