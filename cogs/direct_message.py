@@ -135,8 +135,8 @@ class DirectMessageEvents(commands.Cog, name="Direct Message"):
                 prefix = self.bot.tools.get_guild_prefix(self.bot, guild)
                 embed = discord.Embed(
                     title="New Ticket",
-                    description="Type a message in this channel to reply. Messages starting with the server prefix "
-                    f"`{prefix}` are ignored, and can be used for staff discussion. Use the command "
+                    description=f"Send a message with {prefix}reply to reply. Messages not starting with a command "
+                    f"are ignored, and can be used for staff discussion. Use the command "
                     f"`{prefix}close [reason]` to close this ticket.",
                     colour=self.bot.primary_colour,
                     timestamp=datetime.datetime.utcnow(),

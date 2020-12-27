@@ -128,7 +128,7 @@ class Core(commands.Cog):
                             log_url = log_url.replace("modmail_log_", "")
                             log_url = [hex(int(some_id))[2:] for some_id in log_url.split("/")]
                             log_url = f"https://modmail.xyz/logs/{'-'.join(log_url)}"
-                            embed.add_field(name="Message Logs", value=log_url, inline=False)
+                            # embed.add_field(name="Message Logs", value=log_url, inline=False)
                             await asyncio.sleep(0.5)
                             await msg.edit(embed=embed)
                             return
