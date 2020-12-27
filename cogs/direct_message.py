@@ -21,6 +21,7 @@ class DirectMessageEvents(commands.Cog, name="Direct Message"):
 
     async def send_mail(self, message, guild, to_send):
         old_guild = guild
+        old_guild_obj = self.bot.get_guild(old_guild)
         guild = await self.bot.tools.guild_replace(self.bot, self.bot.get_guild(guild))
         self.bot.prom.tickets_message.inc({})
         if not guild:
@@ -65,7 +66,7 @@ class DirectMessageEvents(commands.Cog, name="Direct Message"):
             return
         channels = [
             channel
-            for channel in guild.text_channels
+            for channel in old_guild_obj.text_channels
             if checks.is_modmail_channel2(self.bot, channel, message.author.id)
         ]
         channel_id = None
