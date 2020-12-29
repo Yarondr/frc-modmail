@@ -39,10 +39,14 @@ class Core(commands.Cog):
 
     async def close_channel(self, ctx, reason, anon: bool = False):
         try:
+            guild = await self.bot.tools.guild_replace(self.bot, ctx.guild)
             await ctx.send(embed=discord.Embed(description="Closing channel...", colour=self.bot.primary_colour))
             data = await self.bot.get_data(ctx.guild.id)
             if data[7] is True:
+                print("data 7")
                 messages = await ctx.channel.history(limit=10000).flatten()
+            else:
+                print(data[7])
             await ctx.channel.delete()
             embed = discord.Embed(
                 title="Ticket Closed",
@@ -54,8 +58,8 @@ class Core(commands.Cog):
                 name=str(ctx.author.name) if anon is False else "Anonymous#0000",
                 icon_url=ctx.author.avatar_url if anon is False else "https://cdn.discordapp.com/embed/avatars/0.png",
             )
-            embed.set_footer(text=f"{ctx.guild.name} | {ctx.guild.id}", icon_url=ctx.guild.icon_url)
-            member = ctx.guild.get_member(self.bot.tools.get_modmail_user(ctx.channel))
+            embed.set_footer(text=f"{guild.name} | {guild.id}", icon_url=guild.icon_url)
+            member = guild.get_member(self.bot.tools.get_modmail_user(ctx.channel))
             if member:
                 try:
                     data = await self.bot.get_data(ctx.guild.id)
@@ -67,8 +71,8 @@ class Core(commands.Cog):
                             timestamp=datetime.datetime.utcnow(),
                         )
                         embed2.set_footer(
-                            text=f"{ctx.guild.name} | {ctx.guild.id}",
-                            icon_url=ctx.guild.icon_url,
+                            text=f"{guild.name} | {guild.id}",
+                            icon_url=guild.icon_url,
                         )
                         await member.send(embed=embed2)
                     await member.send(embed=embed)
