@@ -3,6 +3,7 @@ import copy
 import datetime
 import io
 import logging
+import string
 
 import discord
 
@@ -264,6 +265,89 @@ class Core(commands.Cog):
         await ctx.send(
             embed=discord.Embed(description="The blacklist is cleared successfully.", colour=self.bot.primary_colour)
         )
+
+    @checks.in_database()
+    @checks.is_mod()
+    @commands.guild_only()
+    @commands.command(
+        description="Opens a ticket with a user from the mods.",
+        usage="open <member>",
+    )
+    async def open(self, ctx, *, member: discord.Member):
+        guild = await self.bot.tools.guild_replace(self.bot, self.bot.get_guild(ctx.guild.id))
+        message = ctx.message
+        data = await self.bot.get_data(ctx.guild.id)
+        category = await self.bot.comm.handler(
+            "get_guild_channel",
+            -1,
+            {"guild_id": ctx.guild.id, "channel_id": data[2]},
+        )
+        name = "".join(
+            x for x in member.name.lower() if x not in string.punctuation and x.isprintable()
+        )
+        if name:
+            name = name + f"-{member.discriminator}"
+        else:
+            name = member.id
+        channel_id = (
+            await self.bot.http.create_channel(
+                ctx.guild.id,
+                0,
+                name=name,
+                parent_id=category.id,
+                topic=f"ModMail Channel {member.id} (Please do not change this)",
+            )
+        )["id"]
+        log_channel = await self.bot.comm.handler(
+            "get_guild_channel",
+            -1,
+            {"guild_id": guild.id, "channel_id": data[4]},
+        )
+        if log_channel:
+            try:
+                embed = discord.Embed(
+                    title="New Ticket",
+                    colour=self.bot.user_colour,
+                    timestamp=datetime.datetime.utcnow(),
+                )
+                embed.set_footer(
+                    text=f"{member.name}#{member.discriminator} | {member.id}",
+                    icon_url=message.author.avatar_url,
+                )
+                await self.bot.http.send_message(log_channel.id, None, embed=embed.to_dict())
+            except discord.Forbidden:
+                pass
+        prefix = self.bot.tools.get_guild_prefix(self.bot, guild)
+        embed = discord.Embed(
+            title="New Ticket",
+            description=f"Send a message with {prefix}reply to reply. Messages not starting with a command "
+                        f"are ignored, and can be used for staff discussion. Use the command "
+                        f"`{prefix}close [reason]` to close this ticket.",
+            colour=self.bot.primary_colour,
+            timestamp=datetime.datetime.utcnow(),
+        )
+        embed.set_footer(
+            text=f"{message.author.name}#{message.author.discriminator} | {message.author.id}",
+            icon_url=message.author.avatar_url,
+        )
+        roles = []
+        for role in data[8]:
+            if role == guild.id:
+                roles.append("@everyone")
+            elif role == -1:
+                roles.append("@here")
+            else:
+                roles.append(f"<@&{role}>")
+        await self.bot.http.send_message(channel_id, " ".join(roles), embed=embed.to_dict())
+        if data[5]:
+            embed = discord.Embed(
+                title="Custom Greeting Message",
+                description=self.bot.tools.tag_format(data[5], message.author),
+                colour=self.bot.mod_colour,
+                timestamp=datetime.datetime.utcnow(),
+            )
+            embed.set_footer(text=f"{guild.name} | {guild.id}", icon_url=guild.icon_url)
+            await message.channel.send(embed=embed)
 
     @checks.in_database()
     @checks.is_mod()
