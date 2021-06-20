@@ -165,10 +165,14 @@ class DirectMessageEvents(commands.Cog, name="Direct Message"):
                     await message.channel.send(embed=embed)
             embed = discord.Embed(
                 title="Message Sent",
-                description=to_send,
+                description=to_send[:2047],
                 colour=self.bot.user_colour,
                 timestamp=datetime.datetime.utcnow(),
             )
+            if len(to_send) > 2047:
+                embed.add_field(name="Message (continued)", value=to_send[2048:3071])
+            if len(to_send) > 3071:
+                embed.add_field(name="Message (continued)", value=to_send[3072:4000])
             embed.set_footer(text=f"{guild.name} | {guild.id}", icon_url=guild.icon_url)
             files = []
             for file in message.attachments:
