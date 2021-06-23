@@ -69,7 +69,7 @@ class ModMailEvents(commands.Cog):
         try:
             embed = discord.Embed(
                 title="Message Received",
-                description=message.content if msg is None else msg,
+                description=message.content[:2047] if msg is None else msg[:2047],
                 colour=self.bot.mod_colour,
                 timestamp=datetime.datetime.utcnow(),
             )
@@ -79,6 +79,10 @@ class ModMailEvents(commands.Cog):
                 if anon is False
                 else "https://cdn.discordapp.com/embed/avatars/0.png",
             )
+            if len(msg) > 2047:
+                embed.add_field(name="Message (continued)", value=msg[2048:3071])
+            if len(msg) > 3071:
+                embed.add_field(name="Message (continued)", value=msg[3072:4000])
             embed.set_footer(text=f"{guild.name} | {guild.id}", icon_url=guild.icon_url)
             files = []
             for file in message.attachments:
