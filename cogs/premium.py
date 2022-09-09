@@ -18,6 +18,7 @@ class Premium(commands.Cog):
         usage="premium",
         aliases=["donate", "patron"],
     )
+    @commands.has_permissions(administrator=True)
     async def premium(self, ctx):
         embed = discord.Embed(
             title="Premium",
@@ -42,6 +43,7 @@ class Premium(commands.Cog):
 
     @checks.is_premium()
     @commands.guild_only()
+    @commands.has_permissions(administrator=True)
     @commands.command(description="Get the premium status of this server.", usage="premiumstatus")
     async def premiumstatus(self, ctx):
         async with self.bot.pool.acquire() as conn:
@@ -59,6 +61,7 @@ class Premium(commands.Cog):
                 return
 
     @checks.is_patron()
+    @checks.is_owner()
     @commands.command(
         description="Get a list of servers you assigned premium to.",
         usage="premiumlist",
@@ -84,7 +87,7 @@ class Premium(commands.Cog):
                 to_send += f"\n{guild.name} `{server}`"
         await ctx.send(embed=discord.Embed(description=to_send, colour=self.bot.primary_colour))
 
-    @checks.is_patron()
+    @checks.is_owner()
     @commands.command(description="Assign premium slot to a server.", usage="premiumassign <server ID>")
     async def premiumassign(self, ctx, *, guild: int):
         if not await self.bot.comm.handler("get_guild", -1, {"guild_id": guild}):
@@ -119,7 +122,7 @@ class Premium(commands.Cog):
             await conn.execute("UPDATE premium SET guild=$1 WHERE identifier=$2", servers[0], ctx.author.id)
         await ctx.send(embed=discord.Embed(description="That server now has premium.", colour=self.bot.primary_colour))
 
-    @checks.is_patron()
+    @checks.is_owner()
     @commands.command(description="Remove premium slot from a server.", usage="premiumremove <server ID>")
     async def premiumremove(self, ctx, *, guild: int):
         async with self.bot.pool.acquire() as conn:

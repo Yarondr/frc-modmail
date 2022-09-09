@@ -74,7 +74,7 @@ initial_extensions = [
     "cogs.error_handler",
     "cogs.events",
     "cogs.general",
-    "cogs.miscellaneous",
+    # "cogs.miscellaneous",
     "cogs.modmail_channel",
     "cogs.owner",
     "cogs.premium",

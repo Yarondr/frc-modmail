@@ -16,12 +16,12 @@ To learn more, check out our [website](https://modmail.xyz) or visit our [Discor
 
 Want to contribute? Awesome! There are many ways you can contribute to this project, for example:
 
-- [Submitting bugs and feature requests](https://github.com/frcdiscord/modmail/issues)
-- [Reviewing changes](https://github.com/frcdiscord/modmail/pulls)
-- [Contribute directly to the code base](https://github.com/frcdiscord/modmail/pulls)
+- [Submitting bugs and feature requests](https://github.com/yarondr/frc-modmail/issues)
+- [Reviewing changes](https://github.com/yarondr/frc-modmail/pulls)
+- [Contribute directly to the code base](https://github.com/yarondr/frc-modmail/pulls)
 - Sponsoring the project (Please let CHamburr#2591 know on Discord)
 
-For more information on contributing, please see the [contributing guidelines](https://github.com/frcdiscord/modmail/blob/master/CONTRIBUTING.md).
+For more information on contributing, please see the [contributing guidelines](https://github.com/yarondr/frc-modmail/blob/master/CONTRIBUTING.md).
 
 The issue tracker here is only for bug reports and feature requests. Please do not use it to ask a question. Instead, ask it on our [Discord server](https://discord.gg/wjWJwJB).
 
