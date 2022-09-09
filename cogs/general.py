@@ -131,7 +131,7 @@ class General(commands.Cog):
         users = sum(await self.bot.comm.handler("user_count", self.bot.cluster_count))
 
         embed = discord.Embed(title=f"{self.bot.user.name} Statistics", colour=self.bot.primary_colour)
-        embed.add_field(name="Owner", value="Yaron#5052")
+        embed.add_field(name="Owner", value="Yaron#7453")
         embed.add_field(name="Bot Version", value=self.bot.version)
         embed.add_field(name="Uptime", value=self.get_bot_uptime(brief=True))
         embed.add_field(name="Clusters", value=f"{self.bot.cluster}/{self.bot.cluster_count}")
