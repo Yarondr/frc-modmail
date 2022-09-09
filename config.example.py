@@ -37,6 +37,9 @@ database = {
     "port": 5432,
 }
 
+# Redis credentials
+redis_password = ""
+
 # Number of clusters
 clusters = 1
 

@@ -147,7 +147,7 @@ class Main:
         return None
 
     async def event_handler(self):
-        self.redis = await aioredis.create_pool("redis://localhost", minsize=1, maxsize=2)
+        self.redis = await aioredis.create_pool("redis://localhost", minsize=1, maxsize=2, password=config.redis_password)
         await self.redis.execute_pubsub("SUBSCRIBE", config.ipc_channel)
         channel = self.redis.pubsub_channels[bytes(config.ipc_channel, "utf-8")]
         while await channel.wait_message():
